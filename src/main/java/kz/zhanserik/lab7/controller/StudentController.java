@@ -1,7 +1,7 @@
 package kz.zhanserik.lab7.controller;
 
 import kz.zhanserik.lab7.dto.StudentDto;
-import kz.zhanserik.lab7.service.StudentService; // <-- Дұрыс импорт
+import kz.zhanserik.lab7.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +16,7 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
+    // --- Ескі CRUD ---
     @PostMapping
     public ResponseEntity<StudentDto> createStudent(@RequestBody StudentDto studentDto) {
         StudentDto createdStudent = studentService.createStudent(studentDto);
@@ -44,5 +45,24 @@ public class StudentController {
     public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
         studentService.deleteStudent(id);
         return ResponseEntity.noContent().build();
+    }
+
+
+    @PostMapping("/{studentId}/courses/{courseId}")
+    public ResponseEntity<StudentDto> addCourseToStudent(
+            @PathVariable Long studentId,
+            @PathVariable Long courseId) {
+
+        StudentDto updatedStudent = studentService.addCourseToStudent(studentId, courseId);
+        return ResponseEntity.ok(updatedStudent);
+    }
+
+    @DeleteMapping("/{studentId}/courses/{courseId}")
+    public ResponseEntity<StudentDto> removeCourseFromStudent(
+            @PathVariable Long studentId,
+            @PathVariable Long courseId) {
+
+        StudentDto updatedStudent = studentService.removeCourseFromStudent(studentId, courseId);
+        return ResponseEntity.ok(updatedStudent);
     }
 }
